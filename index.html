@@ -62,10 +62,10 @@
       }
 
       class Weapon {
-        constructor({ name, dice, base = [], surges = [] }) {
+        constructor({ name, dice, base = {}, surges = [] }) {
           this.name = name
           this.dice = new Dice(dice)
-          this.base = base.reduce(add, {})
+          this.base = base
           this.surges = surges
         }
 
@@ -167,7 +167,7 @@
         new Weapon({
           name: '434 "Deathhammer"',
           dice: [ DICE.BLUE, DICE.RED ],
-          base: [ { damage: 1 } ],
+          base: { damage: 1 },
           surges: [ { damage: 1 }, { accuracy: 2 } ],
         }),
 
@@ -187,7 +187,7 @@
         new Weapon({
           name: 'A280',
           dice: [ DICE.BLUE, DICE.GREEN ],
-          base: [ { accuracy: 1 } ],
+          base: { accuracy: 1 },
           surges: [ { pierce: 2 }, { damage: 2 } ],
         }),
 
@@ -200,7 +200,7 @@
         new Weapon({
           name: 'DXR-6',
           dice: [ DICE.RED, DICE.RED ],
-          base: [ { accuracy: 6 } ],
+          base: { accuracy: 6 },
           surges: [ { pierce: 2 }, { damage: 2 } ],
         }),
 
