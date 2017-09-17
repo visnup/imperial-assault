@@ -21,15 +21,22 @@
     <p>
       Ranged weapon simulations against no defense, black, and white dice.
       Percent of times yielded results in damage and accuracy.
-      Surges prioritized towards damage.
     </p>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
     <script>
       function add(lhs, rhs) {
+        let damage = rhs.damage || 0
+
+        if (rhs.pierce && lhs.damage < 0) {
+          //console.log(`piercing ${lhs.damage} with ${rhs.pierce}`)
+          damage += Math.min(Math.abs(lhs.damage), rhs.pierce)
+        }
+
         return {
           accuracy: (lhs.accuracy || 0) + (rhs.accuracy || 0),
-          damage:   (lhs.damage || 0)   + (rhs.damage || 0),
+          damage:   (lhs.damage || 0)   + damage,
           surge:    (lhs.surge || 0)    + (rhs.surge || 0),
         }
       }
@@ -63,13 +70,24 @@
         }
 
         attack(defense = new Dice([])) {
-          let result = this.dice.roll(defense.roll(this.base)),
-              surges = [ ...this.surges ]
+          // roll attack + base
+          let attack = this.dice.roll(this.base)
+          // roll defense
+          defense = defense.roll()
 
-          while (result.surge > 0 && surges.length) {
-            result = add(result, Object.assign({}, surges.shift(), { surge: -1 }))
+          let { surge } = add(attack, defense)
+
+          // apply surges
+          let surges = _.shuffle(this.surges)
+          while (surge > 0 && surges.length) {
+            attack = add(attack, surges.shift())
+            surge--
           }
 
+          // apply attack
+          let result = add(attack, defense)
+
+          // bound results
           result.accuracy = Math.max(result.accuracy, 0)
           result.damage = Math.max(result.damage, 0)
           result.surge = Math.max(result.surge, 0)
@@ -113,17 +131,17 @@
         ]),
 
         BLACK: new Die([
-          { damage: -1, surge:  0 },
-          { damage: -1, surge:  0 },
-          { damage: -2, surge:  0 },
-          { damage: -2, surge:  1 },
-          { damage: -3, surge:  0 },
-          { damage:  0, surge: -1 },
+          { damage: -1 },
+          { damage: -1 },
+          { damage: -2 },
+          { damage: -2 },
+          { damage: -3 },
+          { surge: -1 },
         ]),
         WHITE: new Die([
-          { damage:  0, surge:  0 },
-          { damage: -1, surge:  0 },
-          { damage:  0, surge: -1 },
+          { },
+          { damage: -1 },
+          { surge: -1 },
           { damage: -1, surge: -1 },
           { damage: -1, surge: -1 },
           { damage: -Infinity },
@@ -153,6 +171,7 @@
           surges: [ { damage: 1 }, { accuracy: 2 } ],
         }),
 
+        /*
         new Weapon({
           name: 'Sporting Blaster',
           dice: [ DICE.BLUE, DICE.YELLOW, DICE.YELLOW ],
@@ -169,27 +188,28 @@
           name: 'A280',
           dice: [ DICE.BLUE, DICE.GREEN ],
           base: [ { accuracy: 1 } ],
-          surges: [ { damage: 2 }, { pierce: 2 } ],
+          surges: [ { pierce: 2 }, { damage: 2 } ],
         }),
 
         new Weapon({
           name: 'T-21',
           dice: [ DICE.GREEN, DICE.GREEN, DICE.YELLOW ],
-          surges: [ { accuracy: 3 }, { pierce: 2 } ],
+          surges: [ { pierce: 2 }, { accuracy: 3 } ],
         }),
 
         new Weapon({
           name: 'DXR-6',
           dice: [ DICE.RED, DICE.RED ],
           base: [ { accuracy: 6 } ],
-          surges: [ { damage: 2 }, { pierce: 2 } ],
+          surges: [ { pierce: 2 }, { damage: 2 } ],
         }),
 
         new Weapon({
           name: 'Pulse Cannon',
           dice: [ DICE.BLUE, DICE.GREEN, DICE.YELLOW ],
-          surges: [ { damage: 2 }, { pierce: 1 }, { accuracy: 2 } ],
+          surges: [ { pierce: 1 }, { damage: 2 }, { accuracy: 2 } ],
         }),
+        */
       ]
 
       let simulations = 5000
