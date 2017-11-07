@@ -153,6 +153,76 @@
 
       const WEAPONS = [
         new Weapon({
+          name: '434 "Deathhammer" + DL-44 + (Tactical Display | Gunslinger)',
+          dice: [ DICE.BLUE, DICE.RED ],
+          base: { damage: 1, surge: 1 },
+          surges: [
+            { damage: 2 },
+            { accuracy: 2, damage: 1 },
+            { damage: 1 },
+            { accuracy: 2 }
+          ],
+        }),
+
+        new Weapon({
+          name: '434 "Deathhammer" + DL-44 + Tactical Display + Cheap Shot + Gunslinger',
+          dice: [ DICE.BLUE, DICE.RED ],
+          base: { damage: 2, surge: 2 },
+          surges: [
+            { damage: 2 },
+            { accuracy: 2, damage: 1 },
+            { damage: 1 },
+            { accuracy: 2 }
+          ],
+        }),
+
+        new Weapon({
+          name: 'DL-44 + 434 "Deathhammer" + Tactical Display + Cheap Shot + Gunslinger',
+          dice: [ DICE.BLUE, DICE.YELLOW ],
+          base: { damage: 1, surge: 2 },
+          surges: [
+            { damage: 2 },
+            { accuracy: 2, damage: 1 },
+            { damage: 1 },
+            { accuracy: 2 }
+          ],
+        }),
+
+        new Weapon({
+          name: 'Force Pike',
+          dice: [ DICE.RED, DICE.YELLOW, DICE.YELLOW ],
+          base: { accuracy: 1 },
+          surges: [
+            { damage: 1 },
+            { damage: 1 },
+            { stun: 1 },
+          ],
+        }),
+
+        new Weapon({
+          name: 'Force Pike + Dancing Weapon',
+          dice: [ DICE.RED, DICE.YELLOW, DICE.YELLOW, DICE.BLUE ],
+          surges: [
+            { damage: 1 },
+            { damage: 1 },
+            { stun: 1 },
+            { accuracy: 2, damage: 1 }
+          ],
+        }),
+
+        new Weapon({
+          name: 'Force Pike + Dancing Weapon + Focused',
+          dice: [ DICE.RED, DICE.YELLOW, DICE.YELLOW, DICE.BLUE, DICE.GREEN ],
+          surges: [
+            { damage: 1 },
+            { damage: 1 },
+            { stun: 1 },
+            { accuracy: 2, damage: 1 }
+          ],
+        }),
+
+        /*
+        new Weapon({
           name: 'Vintage Blaster',
           dice: [ DICE.GREEN, DICE.GREEN ],
           surges: [ { damage: 1 }, { accuracy: 1 } ],
@@ -170,8 +240,13 @@
           base: { damage: 1 },
           surges: [ { damage: 1 }, { accuracy: 2 } ],
         }),
+I
+        new Weapon({
+          name: 'T-21',
+          dice: [ DICE.GREEN, DICE.GREEN, DICE.YELLOW ],
+          surges: [ { pierce: 2 }, { accuracy: 3 } ],
+        }),
 
-        /*
         new Weapon({
           name: 'Sporting Blaster',
           dice: [ DICE.BLUE, DICE.YELLOW, DICE.YELLOW ],
@@ -189,12 +264,6 @@
           dice: [ DICE.BLUE, DICE.GREEN ],
           base: { accuracy: 1 },
           surges: [ { pierce: 2 }, { damage: 2 } ],
-        }),
-
-        new Weapon({
-          name: 'T-21',
-          dice: [ DICE.GREEN, DICE.GREEN, DICE.YELLOW ],
-          surges: [ { pierce: 2 }, { accuracy: 3 } ],
         }),
 
         new Weapon({
@@ -221,8 +290,8 @@
       WEAPONS.forEach(weapon => {
         d3.select('body').append('h2').text(weapon.name)
 
-        ;[ DICE.NONE, DICE.BLACK, DICE.WHITE ].forEach(defense => {
-          defense = new Dice([ defense ])
+        ;[ [], [ DICE.BLACK ], [ DICE.WHITE ] ].forEach(defense => {
+          defense = new Dice(defense)
 
           let results = []
           for (let i = 0; i < simulations; i++) {
@@ -238,7 +307,7 @@
           // accuracy
           let x = d3.scaleLinear()
               //.domain([0, d3.max(results, d => d.accuracy)])
-              .domain([0, 9])
+              .domain([0, 14])
               .range([0, width])
           let xAxis = d3.axisBottom()
               .scale(x)
@@ -255,7 +324,7 @@
           // damage
           let y = d3.scaleLinear()
               //.domain([-0.5, d3.max(results, d => d.damage)])
-              .domain([-0.5, 7])
+              .domain([-0.5, 12])
               .range([height, 0])
           let yAxis = d3.axisLeft()
               .scale(y)
