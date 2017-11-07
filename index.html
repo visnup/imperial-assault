@@ -153,26 +153,21 @@
 
       const WEAPONS = [
         new Weapon({
-          name: '434 "Deathhammer" + DL-44 + (Tactical Display | Gunslinger)',
-          dice: [ DICE.BLUE, DICE.RED ],
-          base: { damage: 1, surge: 1 },
+          name: 'Vibro-Ax',
+          dice: [ DICE.RED, DICE.YELLOW ],
           surges: [
-            { damage: 2 },
-            { accuracy: 2, damage: 1 },
-            { damage: 1 },
-            { accuracy: 2 }
+            { pierce: 1 },
+            { cleave: 1 },
           ],
         }),
 
         new Weapon({
-          name: '434 "Deathhammer" + DL-44 + Tactical Display + Cheap Shot + Gunslinger',
-          dice: [ DICE.BLUE, DICE.RED ],
-          base: { damage: 2, surge: 2 },
+          name: 'Vibroknife',
+          dice: [ DICE.BLUE, DICE.GREEN ],
           surges: [
-            { damage: 2 },
-            { accuracy: 2, damage: 1 },
+            { bleed: 1 },
             { damage: 1 },
-            { accuracy: 2 }
+            { pierce: 2 },
           ],
         }),
 
